@@ -1,0 +1,131 @@
+# Node
+node_modules/
+# Build output
+dist/
+build/
+out/
+
+# Prisma
+.prisma/
+prisma/dev.db
+
+# Environment
+.env
+.env.*.local
+.env.local
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# IDEs & editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc caches
+.cache/
+.next/
+.sass-cache/
+.parcel-cache/
+.cache-loader/
+
+# Yarn/PnP
+.pnp.cjs
+.pnp.js
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# Optional npm artifacts
+package-lock.json
+yarn.lock
+
+# ESLint / tooling
+.eslintcache
+
+# Jest
+jest.config.js
+```// filepath: g:\work\SOLO-PROJECT\auth-nodejs-prisma\.gitignore
+# Node
+node_modules/
+# Build output
+dist/
+build/
+out/
+
+# Prisma
+.prisma/
+prisma/dev.db
+
+# Environment
+.env
+.env.*.local
+.env.local
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# IDEs & editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc caches
+.cache/
+.next/
+.sass-cache/
+.parcel-cache/
+.cache-loader/
+
+# Yarn/PnP
+.pnp.cjs
+.pnp.js
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# Optional npm artifacts
+package-lock.json
+yarn.lock
+
+# ESLint / tooling
+.eslintcache
+
+# Jest
+jest.config.js

@@ -1,0 +1,168 @@
+# Auth API Boilerplate (Express + Prisma + PostgreSQL)
+
+A minimal, production-minded starter for authentication and authorization using Express, Prisma, and PostgreSQL. Includes register/login, JWT access & refresh tokens, logout, refresh, password reset, and role-based access control.
+
+## Table of contents
+- Overview
+- Features
+- Requirements
+- Project structure
+- Environment (.env) examples
+- Installation & setup
+- Commands
+- API endpoints (summary + examples)
+- Notes & troubleshooting
+- License
+
+## Overview
+This project provides common auth flows and a clear structure so you can focus on business logic:
+- Email/password registration and login
+- Short-lived access tokens + refresh tokens
+- Token revocation and logout
+- Password reset by token
+- Role-based access control (user / admin)
+- Prisma for DB access, dotenv for config, bcrypt for passwords
+
+## Features
+- Registration, login, logout, refresh
+- Refresh token storage and revocation
+- Password reset flow (request + reset)
+- Middleware-protected routes and role checks
+- Clean folder layout for controllers, routes, middlewares, utils
+
+## Requirements
+- Node.js 18+
+- npm / pnpm / yarn
+- PostgreSQL (can be swapped to MySQL/SQLite with config changes)
+- npx (for Prisma CLI)
+
+## Project structure
+auth-api/
+- prisma/            — Prisma schema & migrations
+- src/
+  - config/          — configuration loaders
+  - controllers/     — route handlers / business logic
+  - middlewares/     — auth & error middlewares
+  - routes/          — Express routers
+  - utils/           — helpers (jwt, email, hashing)
+  - server.js        — app entry (or src/app.js)
+- .env               — environment variables
+- package.json
+
+## Environment (.env)
+Create `.env` in the project root. Example:
+
+# Required
+DATABASE_URL="postgresql://username:password@localhost:5432/authdb?schema=public"
+DATABASE_ENGINE=postgresql
+PORT=5000
+
+JWT_SECRET="your_jwt_secret"
+JWT_EXPIRES_IN="15m"
+
+JWT_REFRESH_SECRET="your_refresh_secret"
+JWT_REFRESH_EXPIRES_IN="7d"
+
+RESET_SECRET="your_reset_secret"
+RESET_EXPIRES_IN="15m"
+
+# Optionally build DATABASE_URL from pieces:
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=username
+DB_PASSWORD=password
+DB_NAME=authdb
+# DATABASE_URL="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=public"
+
+Notes:
+- For MySQL use `mysql://...`
+- For SQLite use `file:./dev.db` and set provider in schema.prisma
+
+## Installation & setup
+1. Clone repository
+   git clone <repo-url>
+   cd auth-nodejs-prisma
+
+2. Install dependencies
+   npm install
+
+3. Create and configure `.env` (see above)
+
+4. Generate Prisma client
+   npx prisma generate
+
+5. Create database schema
+   npx prisma migrate dev --name init
+   (or `npx prisma db push` to push schema without migration history)
+
+6. Start server (dev)
+   npm run dev
+   Server default: http://localhost:5000
+
+## Useful commands
+- npx prisma generate — regenerate Prisma client
+- npx prisma migrate dev --name <name> — create migration & apply
+- npx prisma db push — apply schema without migrations
+- npm run dev — start in dev (nodemon)
+- node src/server.js — run directly
+
+## API Endpoints (summary)
+Auth routes (public)
+- POST /api/auth/register — register new user
+- POST /api/auth/login — login, returns { accessToken, refreshToken }
+- POST /api/auth/refresh — exchange refreshToken for new accessToken
+- POST /api/auth/logout — revoke refresh token
+- POST /api/auth/request-reset — request password reset (returns token in dev)
+- POST /api/auth/reset-password — reset password with token
+
+User routes (protected)
+- GET /api/users/me — current user (no password)
+
+## Example requests
+
+Register
+POST /api/auth/register
+Content-Type: application/json
+{
+  "email": "user@mail.com",
+  "password": "123456"
+}
+
+Login
+POST /api/auth/login
+Content-Type: application/json
+{
+  "email": "user@mail.com",
+  "password": "123456"
+}
+Response:
+{
+  "accessToken": "eyJhbGci...",
+  "refreshToken": "eyJhbGci..."
+}
+
+Get current user
+GET /api/users/me
+Header:
+Authorization: Bearer <accessToken>
+
+## Troubleshooting
+- 404 on a route:
+  - Confirm server restarted after changes.
+  - Ensure router is mounted in `src/app.js` (app.use("/api/users", userRoutes)).
+  - If routes are protected, include Authorization header: `Authorization: Bearer <token>`.
+  - Check `authMiddleware` calls `next()` on success and sets `req.user`.
+
+- Prisma errors:
+  - Ensure `DATABASE_URL` is correct and reachable.
+  - Run `npx prisma generate` after schema changes.
+
+## Postman / OpenAPI
+Include or generate a Postman collection / OpenAPI spec for quick testing. Example collection filename: `auth-api.postman_collection.json`.
+
+## Contributing
+- Fixes and improvements welcome. Open PRs and include tests where possible.
+- Keep controllers thin and move reusable logic to utils.
+
+## License
+MIT
